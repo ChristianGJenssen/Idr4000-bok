@@ -24,11 +24,11 @@ De fem forskjellige studiene brukte lignende studiedesign, nemlig et studiedesig
 
 Årsaken til at studiene har valgt og gjøre et randomisert kontrollert studie er for å sørge for at studiet blir så objektivt som mulig. Ulempen med å kjøre et slikt studie design er jo at man ikke har kontroll over om nivået i hver gruppe blir likt, det er derfor sørget noen av studiene for at det var ca like mange av hvert kjønn på hver gruppe og @millet2002 sørget for at elite utøverne var jevnt fordelt.                                               
 
-@saunders2006 sitt studie følger også studie-designet \"repeated-measures design study\" som vil si at deltakerne blir testet over en periode, i tillegg til en pre og post test. I dette tilfellet ble deltakerne først testet for å se om de var gode nok til å delta på studiet, som også var en pre-test, når intervensjonen begynte ble deltakerne testet i uke 5 og uke 9 i tillegg til post test.
+@saunders2006 sitt studie følger også studie-designet "repeated-measures design study" som vil si at deltakerne blir testet over en periode, i tillegg til en pre og post test. I dette tilfellet ble deltakerne først testet for å se om de var gode nok til å delta på studiet, som også var en pre-test, når intervensjonen begynte ble deltakerne testet i uke 5 og uke 9 i tillegg til post test.
 
 Tester
 
-@millet2002 testen hadde flere forskjellige tester, disse bestod av Maksimal hopp test, 3000m løp på en bestemt fart, en maksimal konsentrasjonstest av beina. De hadde også en \"incremental running test\" til man ikke klarte mer for å finne VO2max og RE. 
+@millet2002 testen hadde flere forskjellige tester, disse bestod av Maksimal hopp test, 3000m løp på en bestemt fart, en maksimal konsentrasjonstest av beina. De hadde også en "incremental running test" til man ikke klarte mer for å finne VO2max og RE. 
 
 @saunders2006 sitt studiet målte RE ved å ha utøveren løpe på tre bestemte hastigheter på en tredemølle samtidig som at det ble målt laktat, puls og O2 opptak. @støren2008 hadde også en lignende protokoll til å te RE, men det blir bare nevnt at deltakerne løper i perioder på 5 min på en gitt stigning på tredemøllen, men med varierende fart. 
 
@@ -36,7 +36,7 @@ Hvis man ser på disse testene så virker det som at de har potensial til å væ
 
 Statistisk analyser
 
-For å finne ut om observasjonene man har fått egentlig har noe sammenheng og betydning så må man jo analysere dataen man har samlet inn. Hvordan man gjør det varierer jo fra hva slags studiet man kjører og hva det er man leter etter. Alle valgte studier brukte en ANOVA analyse som står for \"Analysis of Variance\" som er en måte å se på forskjellen mellom to grupper, sånn intervensjonsgruppen og kontrollgruppen. Det var kun et studiet som ikke brukte ANOVA og det var @støren2008 sitt studiet.
+For å finne ut om observasjonene man har fått egentlig har noe sammenheng og betydning så må man jo analysere dataen man har samlet inn. Hvordan man gjør det varierer jo fra hva slags studiet man kjører og hva det er man leter etter. Alle valgte studier brukte en ANOVA analyse som står for "Analysis of Variance" som er en måte å se på forskjellen mellom to grupper, sånn intervensjonsgruppen og kontrollgruppen. Det var kun et studiet som ikke brukte ANOVA og det var @støren2008 sitt studiet.
 
 Istedenfor valgte @støren2008 å bruke en paired t-test og en independent t-test. Studiet til @turner2003 valgte også å kjøre en independent t-test, dette går da ut på å regne ut forskjellen mellom to målinger, i dette tilfelle pre og posttest innad i samme gruppe, men en paired t-test går ut på å regne ut forskjellen mellom kontrollgruppen og intervensjonsgruppen. 
 
