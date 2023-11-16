@@ -1,0 +1,26 @@
+project:
+  type: book
+
+book:
+  title: "IDR4000 Mappeeksamen"
+  author: "404"
+  date: "17/11/2023"
+  chapters:
+    - index.qmd
+    - Del_1.qmd
+    - Del_2.qmd
+    - Del_3.qmd
+    - Del_4.qmd
+    - Del_5.qmd
+    - references.qmd
+
+bibliography: references.bib
+
+format:
+  html:
+    theme: darkly
+  pdf:
+    documentclass: scrreprt
+
+editor: visual
+

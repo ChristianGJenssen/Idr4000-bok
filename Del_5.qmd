@@ -1,0 +1,351 @@
+## Analysere gjentatte tiltak eksperimenter
+
+```{r}
+#| message: false
+#| warning: false 
+#| echo: false
+
+
+library(exscidata)
+
+library(tidyverse)
+
+library(dplyr)
+
+library(lme4)
+
+library(ggplot2)
+
+library(knitr)
+
+data("dxadata"); data("strengthvolume")
+
+
+```
+
+## Innledning
+
+Manhar vært stort sett enige om at styrketrening er den mest optimale måten og øke muskelmasse og styrke. Men hva som er den mest optimale metoden og som gir best resultat er enda kraftig diskutert. I @krieger2010 sin artikkel fant han ikke enn mer singinfikant endring jo høyere antall sets. Så ser man på studiet til Santana så mener de at jo større mengde desto større effekt. [@santana2021]
+
+Så i denne artikelen her skal vi se på resultatene til et studie som har sett på hvor stor effekt har et set vs tre set hos utrente deltakere. I læreboka styrketrening blir det nevnt at når en utrent person begynner å trene strukurert styrketrening så er det forventa og se økning i styrke på me 0.5-3% etter hver økt. @raastad2010 Ifølge studien til Wernebom så kan man også forvente å se en økning på 0.1 til 0.5% i tverssnitt på muskulaturen. [@wernbom2007]
+
+Basert på tidligere forskning (@rønnestad2007: @krieger2010) så er vår hypotesete at vi kommer til å se en mer signifikant økning på multiple sets enn på single set.
+
+## Metode
+
+### Deltakere
+
+I studiet var det 41 deltakere som gjennomførte treningsintervensjonen på 12 uker. Kriteriene for å kunne inkludere deltakerne var at de ikke kunne har trent gjenomsnitlig mer enn 1 gang i uka de siste 12 månedene og at de var imellom alderen 18-40 år gamle. Andre eksklusjons kriterier var at deltakerne ikke røyker og ikke var allergisk mot lokal bedøvelse. Syv deltakere egnet seg ikke til å fullføre studiet av ulike årsaker som, skader og smerter.
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false 
+#| label: deltaker tabell
+#| fig-cap: Tabell 1. Tabell over deltakere
+
+dxadata %>%
+  filter(time == "pre") %>%
+  group_by(include, sex) %>%
+  summarize(
+    N = n(),
+    Avg_Age = round(mean(age, na.rm = TRUE), 1),
+    SD = paste0("(", round(sd(age, na.rm = TRUE), 1), ")"),
+    Avg_Height = round(mean(height, na.rm = TRUE), 1),
+    SD. = paste0("(", round(sd(height, na.rm = TRUE), 1), ")"),
+    Avg_Weight = round(mean(weight, na.rm = TRUE), 1),
+    SD.. = paste0("(", round(sd(weight, na.rm = TRUE), 1), ")")
+  ) %>%
+  knitr::kable()
+
+
+```
+
+Intervensjonsperioden varte i 12 uker hvor deltakerne trene hele kroppen. Før treningsperioden begynte ble beina til deltakerne tilfeldig delt inn i om det var høyre eller venstre bein som skulle trene en rep eller 3 rep.
+
+Når deltakerne skulle kjøre treningsøkter så fulgte de en standard protokoll. Den startet først men 5min sykkling på stasjonære sykkel hvor de skulle ligge på 12-14 på borgs skala. Deretter skulle de gjøre ulike kroppsvektøvelser som knebøy, rygghev,knebøy, push ups og sit-ups. På hver øvelse så skulle de gjøre 10 repetisjoner. Deretter skuller de trene underkropp hvor de gjorde øvelsene beinpress, leg curl og beinekstensjon. Hver øvelse ble gjort eneten som et set eller fler set med 90-180sek pause mellom settene. Etter de var ferdige med disse øvelsene så skulle deltakerne gjøre to sett av de følgene øvelsene som var nedtrekk, benkpress og så varierte det mellom sittende roing og skulderpress som de bytta på annen hver økt.
+
+Maksimal styrk i kneekstesjon ble målt av et dynamometer. testen foregikk slik at deltakerne ble sittende sikret til dynamometeret med kneleddet på linje med dynamometerets rotasjonsakse. Dermed ble det makskimalt isokinetisk dreiemoment vurdert ved tre ulike vinkelhastigheter (60°, 120° og 240°). Deltakeren fikk to forsøk på 60° og tre forsøk på de to andre vinklene. Forsøkene ble tatt rett etter hverandre og da ble den høyeste verdien valgt. Etter de var ferdige med den isokonetiske testen så startet testen på maksimalt frivillig kontraksjonsmoment. Den gikk ut på at deltakerne skulle skyve/trekke ned foten med maksimal kraft i 5 sekunder mot en spak. Beinet var ved 30° under testen og de fikk to forsøk med 30sek pause mellom. Deretter ble den høyeste verdien skrevet ned.
+
+Maksimal styrke ble målt med 1rm (one repetition maximum) i beinpress og legekstensjon. Begge testene fulgte samme oppvarmingsprotokol som bestod av 10 reps ved 50% av forventa maksimal styrke, deretter 6 reps på 75% og så 3 reps på 80%. Når protokoll var gjennomført begynte de å 1rm målingen ved å øke motstanden gradvis til deltakeren ikke klarte å utføre hele bevegelsesbanen til øvelsen. Den siste gjennomføtre repen ble da ført som 1rm etter at deltakeren hadde fått 4-6 forsøk på å forbedre den.
+
+Deltakerne fikk også målt kroppssammensetnignen ved pre og post test. Dette ble gjort av en DXA maskin (dual-energy X-ray absorptiometry). Deltakerne ble bed om å faste minst 2t før testing og unngå anstrengende fysisk aktivitet i 48t før testen. DXA scanningen skiltes alltid 2 dager fra styrketestingen.
+
+Intervensjonsperioden varte i 12 uker hvor deltakerne trene hele kroppen. Før treningsperioden begynte ble beina til deltakerne tilfeldig delt inn i om det var høyre eller venstre bein som skulle trene en rep eller 3 rep. Kroppssamensetningen til deltakerne ble målt før og etter treningsintervensjonen. Kneekstesjon ble målt av et dynamometer. testen foregikk slik at deltakerne ble sittende sikret til dynamometeret med kneleddet på linje med dynamometerets rotasjonsakse. Dermed ble det makskimalt isokinetisk dreiemoment vurdert ved tre ulike vinkelhastigheter (60°, 120° og 240°). Deltakeren fikk to forsøk på 60° og tre forsøk på de to andre vinklene. Forsøkene ble tatt rett etter hverandre og da ble den høyeste verdien valgt. Etter de var ferdige med den isokonetiske testen så startet testen på maksimalt frivillig kontraksjonsmoment. Den gikk ut på at deltakerne skulle skyve/trekke ned foten med maksimal kraft i 5 sekunder mot en spak. Beinet var ved 30° under testen og de fikk to forsøk med 30sek pause mellom. Deretter ble den høyeste verdien skrevet ned.
+
+Maksimal styrke ble målt med 1rm (one repetition maximum) i beinpress og legekstensjon. Begge testene fulgte samme oppvarmingsprotokol som bestod av 10 reps ved 50% av forventa maksimal styrke, deretter 6 reps på 75% og så 3 reps på 80%. Når protokoll var gjennomført begynte de å 1rm målingen ved å øke motstanden gradvis til deltakeren ikke klarte å utføre hele bevegelsesbanen til øvelsen. Den siste gjennomførte repetisjonen ble da ført som 1rm etter at deltakeren hadde fått 4-6 forsøk på å forbedre den.
+
+### Statisk Analyse
+
+For statisk analyse ble programmet R brukt til å analysere og hente dataen. I denne oppgaven ble det gjort to ulike paired sample t-test, en som tok for seg pre og post på mager masse mellom single og multiple sets, og en som tok for seg dataen fra pre til post.
+
+## Resultater
+
+I resultatene ser vi en økning i både muskelmasse og i styrke. Ved mager masse så finner vi ikke en signifikant økning mellom gruppene (p = 0.36), men innenfor kneekstensjon finner vi en siginifikant økning med en p-verdi på 0.002
+
+```{r}
+#| label: "Utregning av p std og ste"
+#| warning: false
+#| message: false
+#| echo: false
+#| output: false
+
+leanmass <- dxadata %>%
+  select(participant:include, lean.left_leg, lean.right_leg) %>%
+  pivot_longer(names_to = "leg", 
+               values_to = "lean.mass", 
+               cols = lean.left_leg:lean.right_leg) %>%
+  mutate(leg = if_else(leg == "lean.left_leg", "L", "R"), 
+         sets = if_else(multiple == leg, "multiple", "single")) %>%
+  select(participant, time, sex, include, sets, leg, lean.mass) %>%
+  filter(include == "incl")
+
+leanmass_change_wide <- leanmass %>%
+  pivot_wider(names_from = time, values_from = lean.mass) %>%
+  mutate(change = post - pre) %>%
+  select(participant, sex, sets, change) %>%
+  pivot_wider(names_from = sets, 
+              values_from = change) %>%
+  mutate(diff = multiple - single)
+
+m1 <- lm(diff ~ 1, data = leanmass_change_wide)
+
+summary(m1)
+
+m1pval <- round(coef(summary(m1))[1, 4], 3)
+m1est <- round(coef(summary(m1))[1, 1], 1)
+
+m1ciu <- round(confint(m1)[1,2], 1)
+m1cil <- round(confint(m1)[1,1], 1)
+
+m1results <- paste0(m1est, 
+                    ", 95% CI: [",
+                    m1cil, 
+                    ", ",
+                    m1ciu, 
+                    "], p = ",
+                    m1pval
+                    )
+```
+
+```{r}
+#| label: "pre post lean mass"
+#| warning: false
+#| message: false
+#| echo: false
+#| fig-cap: "**Figur 1.** Denne figuren viser endringen i mager masse fra pre til post."
+
+leanmass %>%
+  filter(sets %in% c("single", "multiple") & (time %in% c("pre", "post"))) %>%
+  group_by(sets, participant, time) %>%
+  summarize(avg_lean_mass = mean(lean.mass)) %>%
+  
+  ggplot(aes(x = factor(time, levels = c("pre", "post")), y = avg_lean_mass, group = interaction(sets, participant), color = interaction(sets, participant))) +
+  
+  geom_line() +
+  stat_summary(aes(group = 1), fun = mean, geom = "line", linetype = "dashed", size = 1.5, color = "black") +
+  
+  geom_text(aes(x = 0.5, y = max(avg_lean_mass, na.rm = TRUE), label = "*"), 
+            color = "black", size = 6, vjust = -0.5, hjust = 0.5) +  
+  
+  facet_wrap(~ sets, scales = "free") +
+  
+  theme_minimal() +
+  
+  guides(color = FALSE) + 
+  
+  labs(
+    title = "Mager Masse",
+    x = "Tidspunkt",
+    y = "Antall gram"
+  )
+
+
+
+```
+
+```{r}
+#| message: false
+#| warning: false 
+#| echo: false
+#| label: T-test tabell Mager Masse
+#| fig-cap: Tabell 2. Denne tabellen viser p-veriden fra pre til post på lean mass
+
+dat <- dxadata %>%
+  select(participant:include, lean.left_leg, lean.right_leg) %>%
+        
+  pivot_longer(names_to = "leg", 
+               values_to = "lean.mass", 
+               cols = lean.left_leg:lean.right_leg) %>%
+  mutate(leg = if_else(leg == "lean.left_leg", "L", "R"), 
+         sets = if_else(multiple == leg, "multiple", "single")) %>%
+  select(participant, time, sex, include, sets, leg, lean.mass) %>%
+
+          filter(include == "incl") %>%
+
+        pivot_wider(names_from = "time", 
+                    values_from = "lean.mass") %>%
+
+        mutate(change = post - pre) %>%
+        
+        select(participant:sets, change) %>%
+        pivot_wider(names_from = sets, values_from = change)
+
+#  t-test og tabell
+
+t_test_results <- t.test(dat$multiple, dat$single, paired = TRUE)
+
+t_test_results <- data.frame(
+  Comparison = "Multiple vs Single Mager Masse",  
+  P_Value = round(t_test_results$p.value, 3),
+  Mean_Multiple = round(mean(dat$multiple), 3),
+  Mean_Single = round(mean(dat$single), 3),
+  SD_Multiple = round(sd(dat$multiple), 3),
+  SD_Single = round(sd(dat$single), 3)
+)
+
+print(t_test_results)
+
+```
+
+```{r}
+#| echo: false
+
+dat <- dxadata %>%
+  select(participant:include, lean.left_leg, lean.right_leg) %>%
+        
+  pivot_longer(names_to = "leg", 
+               values_to = "lean.mass", 
+               cols = lean.left_leg:lean.right_leg) %>%
+  mutate(leg = if_else(leg == "lean.left_leg", "L", "R"), 
+         sets = if_else(multiple == leg, "multiple", "single")) %>%
+  select(participant, time, sex, include, sets, leg, lean.mass) %>%
+
+          filter(include == "incl") %>%
+
+        pivot_wider(names_from = "time", 
+                    values_from = "lean.mass") %>%
+
+        mutate(change = post - pre) %>%
+        
+        select(participant:sets, change) %>%
+        pivot_wider(names_from = sets, values_from = change) 
+
+```
+
+```{r}
+#| message: false
+#| warning: false 
+#| echo: false
+#| fig-cap: Figur 2. Denne figuren viser økningen mellom hver test i styrke på beinet som trente multiple sets. Den stipla linja viser gjennomsnittet.
+
+str <- strengthvolume %>%
+  filter(exercise == "legext", include == "incl") %>%
+  mutate(time = factor(time, levels = c("pre", "session1", "week2", "week5", "week9", "post"))) 
+
+
+str <- str %>%
+  filter(!is.na(load)) 
+
+
+str_multiple <- str %>%
+  filter(sets != "single")
+
+
+ggplot(str_multiple, aes(time, load, group = paste(participant, sets), color = participant, fill = sets)) + 
+  geom_line() + 
+  stat_summary(fun = mean, geom = "line", aes(group = 1), color = "black", linetype = "dashed", size = 1) +
+  facet_wrap(~ exercise, scales = "free") +
+  ggtitle("Multiple Sets")
+
+```
+
+```{r}
+#| message: false
+#| warning: false 
+#| echo: false
+#| label: single set
+#| fig-cap: Figur 3. Denne grafen viser hver deltakers økning på beinet som trente single set. Den stipla linja viser gjennomsnittet på deltakerne.
+
+str <- str %>%
+  filter(!is.na(load)) 
+
+# Create a separate data frame for single sets
+str_single <- str %>%
+  filter(sets == "single")
+
+ggplot(str_single, aes(time, load, group = participant, color = participant)) + 
+  geom_line() + 
+  stat_summary(fun = mean, geom = "line", aes(group = 1), color = "black", linetype = "dashed", size = 1) + 
+  facet_wrap(~ exercise, scales = "free") +
+  ggtitle("Single Set")
+
+
+```
+
+```{r}
+#| message: false
+#| warning: false 
+#| echo: false
+#| label: T-test tabell Legext
+#| fig-cap: Tabell 3. Denne tabellen viser p-veriden fra pre til post styrkeøkningen på begge beina.
+
+strtr <- str %>%
+  select(participant, sex, include, time, sets, leg, exercise, load) %>%
+  filter(include == "incl") %>%
+  pivot_wider(names_from = time, values_from = load) %>%
+  mutate(change = post - pre) %>%
+  select(participant:sets, change) %>%
+  pivot_wider(names_from = sets, values_from = change)
+
+t_test_legext <- t.test(strtr$multiple, strtr$single, paired = TRUE)
+
+result_table_legext <- data.frame(
+  statistic = round(t_test_legext$statistic, 2),
+  p_value = round(t_test_legext$p.value, digit = 3),  
+  df = t_test_legext$parameter
+)
+
+print(result_table_legext)
+
+```
+
+```{r}
+#| message: false
+#| warning: false 
+#| echo: false
+#| label: prosent utregning single multiple
+#| fig-cap: Tabell 4. Denne tabellen viser styrkeøkningen for hvert bein og viser også hvor stor prosentforskjell det er mellom økningene.
+
+avg_percent_increase <- str_single %>%
+  group_by(sets = "single") %>%
+  summarize(avg_percent_increase = round(((mean(load[time == "post"]) - mean(load[time == "pre"])) / mean(load[time == "pre"])) * 100, 1))
+
+avg_percent_increase_multiple <- str_multiple %>%
+  group_by(sets) %>%
+  summarize(avg_percent_increase = round(((mean(load[time == "post"]) - mean(load[time == "pre"])) / mean(load[time == "pre"])) * 100, 1))
+
+avg_percent_increase_table <- bind_rows(
+  avg_percent_increase,
+  avg_percent_increase_multiple
+)
+
+percent_difference <- avg_percent_increase_table %>%
+  spread(sets, avg_percent_increase) %>%
+  mutate(percent_difference = round(((multiple - single) / single) * 100, 1)) %>%
+  gather(key = "sets", value = "avg_percent_increase", -percent_difference) %>%
+  select(sets, avg_percent_increase, percent_difference) %>%
+  arrange(desc(percent_difference)) 
+
+
+print(percent_difference)
+
+```
+
+## Diskusjon
+
+I denne studien skulle vi se på hva som er mer guntstig og trene for utrente personer av et og tre set. Resultatene viser en signifikant økning i styrke og viste at beinet som trente flere set hadde en større økning enn beinet som trente et set. Dette stemmer med hva @schoenfeld2017 skrev i sin artikkel. Det ble også funnet en økning i mager masse i begge bein men det kan tenkes at dette kan være en effekt av at studiet har relativt få deltakere samtidig som at ikke alle deltakerne startet helt utrente heller og da kan det hende at deltakerne responderte dårligere på styrketreningen siden de hadde trengt et større treningsstimuli som ble snakket om i studien til @vikmoen2020.
+
+## Konklusjon
+
+I denne studien så vi ikke en signifikant økning innenfor mager masse, men en signifikant økning i muskelstyrke. Selv med disse funnene så er det allikevel noen svakheter med studien som for eksempel den mindre enn optimale deltaker størrelsen.
