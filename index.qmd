@@ -1,4 +1,13 @@
 # indedx {.unnumbered}
 
-Lenken til Github repository
+
+### Mappeeksamen i IDR4000
+
+### Kvantitativ metode og statistikk.
+
+Kandidatnummeret 404
+
+Github link:
+
+<https://github.com/ChristianGJenssen/Idr4000-bok.git>
 
