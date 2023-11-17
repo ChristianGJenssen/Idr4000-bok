@@ -38,7 +38,7 @@ Hvis man ser på disse testene så virker det som at de har potensial til å væ
 
 ## Statistisk analyser
 
-For å finne ut om observasjonene man har fått egentlig har noe sammenheng og betydning så må man jo analysere dataen man har samlet inn. Hvordan man gjør det varierer jo fra hva slags studiet man kjører og hva det er man leter etter. Alle valgte studier brukte en ANOVA analyse som står for "Analysis of Variance" som er en måte å se på forskjellen mellom to grupper, sånn intervensjonsgruppen og kontrollgruppen. Det var kun et studiet som ikke brukte ANOVA og det var @støren2008 sitt studiet.
+For å finne ut om observasjonene man har fått egentlig har noe sammenheng og betydning så må man jo analysere dataen man har samlet inn. Hvordan man gjør det varierer jo fra hva slags studiet man kjører og hva det er man leter etter. Alle valgte studier brukte en ANOVA analyse som står for "Analysis of Variance" som er en måte å se på forskjellen mellom to grupper, sånn intervensjonsgruppen og kontrollgruppen. ANOVA er et fellesnavn for flere ulike tester hvor man ser på ulikheten mellom to eller fler ulike grupper. Det var kun et studiet som ikke brukte ANOVA og det var @støren2008 sitt studiet.
 
 Istedenfor valgte @støren2008 å bruke en paired t-test og en independent t-test. Studiet til @turner2003 valgte også å kjøre en independent t-test, dette går da ut på å regne ut forskjellen mellom to målinger, i dette tilfelle pre og posttest innad i samme gruppe, men en paired t-test går ut på å regne ut forskjellen mellom kontrollgruppen og intervensjonsgruppen. 
 
