@@ -7,11 +7,11 @@ book:
   date: "17/11/2023"
   chapters:
     - index.qmd
-    - Del_1.qmd
-    - Del_2.qmd
-    - Del_3.qmd
-    - Del_4.qmd
-    - Del_5.qmd
+    - Del_1_Reabilitet.qmd
+    - Del_2_Labrapport.qmd
+    - Del_3_Vitenskapsfilosofi.qmd
+    - Del_4_Studiedesign.qmd
+    - Del_5_Analysere gjentatte tiltak eksperimenter.qmd
     - references.qmd
 
 bibliography: references.bib
